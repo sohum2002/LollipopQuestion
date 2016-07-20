@@ -1,0 +1,36 @@
+import scala.annotation.tailrec
+
+
+def computeLollipops(money_in: Int, lollipopCost: Int, tradeCost: Int) = {
+  computeLollipopsHelper(0, money_in, lollipopCost, tradeCost, 0)
+}
+
+@tailrec
+private def computeLollipopsHelper(lollipops_in: Int, money_in: Int, lollipopCost: Int, tradeCost: Int, wrappers_in: Int): Int = {
+
+  var money = money_in
+  var lollipops = lollipops_in
+  var wrappers = wrappers_in
+
+  val remainder = money % lollipopCost
+  val lollipopsPurchased = (money - remainder) / lollipopCost
+  lollipops += lollipopsPurchased
+  wrappers += lollipopsPurchased
+
+  money -=  (lollipopsPurchased * lollipopCost)
+
+  val wrapper_remainder = lollipops % tradeCost
+
+  val lollipopsExchanged = (wrappers - wrapper_remainder) / tradeCost
+  lollipops += lollipopsExchanged
+  wrappers -= lollipopsExchanged
+
+  if(wrappers < tradeCost) lollipops else computeLollipopsHelper(lollipops, money, lollipopCost, tradeCost, wrappers)
+
+}
+
+
+computeLollipops(4,1,2)
+computeLollipops(10,2,5)
+computeLollipops(12,4,4)
+computeLollipops(6,2,2)
